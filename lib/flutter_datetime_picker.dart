@@ -1,9 +1,9 @@
 library flutter_datetime_picker;
 
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_datetime_picker/src/datetime_picker_theme.dart';
 import 'package:flutter_datetime_picker/src/date_model.dart';
 import 'package:flutter_datetime_picker/src/i18n_model.dart';
@@ -310,7 +310,15 @@ class _DatePickerState extends State<_DatePickerComponent> {
               child: GestureDetector(
                 child: Material(
                   color: theme.backgroundColor,
-                  child: _renderPickerView(theme),
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                    child: _renderPickerView(theme),
+                  ),
                 ),
               ),
             ),
@@ -535,13 +543,11 @@ class _BottomPickerLayout extends SingleChildLayoutDelegate {
   _BottomPickerLayout(
     this.progress,
     this.theme, {
-    this.itemCount,
     this.showTitleActions,
     this.bottomPadding = 0,
   });
 
   final double progress;
-  final int? itemCount;
   final bool? showTitleActions;
   final DatePickerTheme theme;
   final double bottomPadding;
